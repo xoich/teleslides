@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <style>
+      body {
+          text-align: center;
+      }
+      .hide {
+          display: none;
+      }
+    </style>
+    <title>TeleSlides</title>
+  </head>
+  <body>
+    {{#slides}}
+    <img id="slide-{{n}}" src="{{&path}}" class="hide">
+    {{/slides}}
+    <p>This page uses <a href="https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events">server-sent_events</a> to show the live server time:</p>
+    <div id="time"></div>
+    <script type="text/javascript">
+      let prev = document.getElementById("slide-01");
+      let events = new EventSource("/event-stream");
+      events.onmessage = function(e) {
+          let slide = e.data;
+          console.log(slide);
+          prev.classList.add("hide");
+          prev = document.getElementById(slide);
+          prev.classList.remove("hide");
+      }
+    </script>
+  </body>
+</html>
